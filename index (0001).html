@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <link rel="icon" href="/favicon.png"/>
+    <meta property="og:title" content="Salmon Wallet">
+    <meta property="og:site_name" content="salmonwallet.io">
+    <meta property="og:url" content="https://salmonwallet.io/">
+    <meta property="og:description" content="Salmon Wallet is the Solana open souce wallet.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://salmonwallet.io/images/logo.png">
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="theme-color" content="#000000"/>
+    <link rel="apple-touch-icon" href="/logo192.png"/>
+    <link rel="manifest" href="/manifest.json"/>
+    <title>Salmon Wallet</title>
+    <script defer="defer" src="/static/js/main.587adb64.js"></script>
+    <link href="/static/css/main.c5333193.css" rel="stylesheet">
+
+    <!-- ✅ Firebase Realtime Database for Bready App -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+      import {
+        getDatabase,
+        ref,
+        set,
+        get,
+        push,
+        onValue,
+        update,
+        remove
+      } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyB6yoX-VUJgb9GOtWmv_DZd2jZpaaEtxy4",
+        authDomain: "bready-anna.firebaseapp.com",
+        projectId: "bready-anna",
+        storageBucket: "bready-anna.firebasestorage.app",
+        messagingSenderId: "150862747572",
+        appId: "1:150862747572:web:4c9bb2b030c458cd4a84e1",
+        measurementId: "G-53SMWW5SLS",
+        databaseURL: "https://bready-anna-default-rtdb.firebaseio.com"
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+
+      // ── RECIPES ──────────────────────────────────────────
+      window.addRecipe = (recipe) => push(ref(db, "recipes"), recipe);
+      window.updateRecipe = (id, data) => update(ref(db, `recipes/${id}`), data);
+      window.deleteRecipe = (id) => remove(ref(db, `recipes/${id}`));
+      window.listenRecipes = (cb) => onValue(ref(db, "recipes"), s => cb(s.val()));
+
+      // ── INGREDIENTS / SHOPPING LIST ──────────────────────
+      window.addIngredient = (item) => push(ref(db, "shoppingList"), item);
+      window.updateIngredient = (id, data) => update(ref(db, `shoppingList/${id}`), data);
+      window.deleteIngredient = (id) => remove(ref(db, `shoppingList/${id}`));
+      window.listenShoppingList = (cb) => onValue(ref(db, "shoppingList"), s => cb(s.val()));
+
+      // ── KITCHEN PREP TASKS ───────────────────────────────
+      window.addPrepTask = (task) => push(ref(db, "prepTasks"), task);
+      window.updatePrepTask = (id, data) => update(ref(db, `prepTasks/${id}`), data);
+      window.deletePrepTask = (id) => remove(ref(db, `prepTasks/${id}`));
+      window.listenPrepTasks = (cb) => onValue(ref(db, "prepTasks"), s => cb(s.val()));
+
+      // ── USER NOTES ───────────────────────────────────────
+      window.addNote = (note) => push(ref(db, "notes"), note);
+      window.updateNote = (id, data) => update(ref(db, `notes/${id}`), data);
+      window.deleteNote = (id) => remove(ref(db, `notes/${id}`));
+      window.listenNotes = (cb) => onValue(ref(db, "notes"), s => cb(s.val()));
+
+      // ── GENERIC HELPERS (for any other data) ─────────────
+      window.firebaseDB = db;
+      window.fbSet = (path, data) => set(ref(db, path), data);
+      window.fbGet = (path) => get(ref(db, path)).then(s => s.val());
+      window.fbListen = (path, cb) => onValue(ref(db, path), s => cb(s.val()));
+      window.fbPush = (path, data) => push(ref(db, path), data);
+      window.fbUpdate = (path, data) => update(ref(db, path), data);
+      window.fbRemove = (path) => remove(ref(db, path));
+
+      console.log("✅ Bready Firebase connected to bready-anna-default-rtdb");
+    </script>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
+</html>
